@@ -1,0 +1,31 @@
+{
+  "id": "chatcmpl-AVEZmVeQf26XjDgaxdM37nvWgqnW6",
+  "object": "chat.completion",
+  "created": 1732007562,
+  "model": "gpt-4o-2024-08-06",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Everest, sin oxígeno suplementario, montañismo extremo, expedición, Nepal",
+        "refusal": null
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 65,
+    "completion_tokens": 18,
+    "total_tokens": 83,
+    "prompt_tokens_details": { "cached_tokens": 0, "audio_tokens": 0 },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "system_fingerprint": "fp_7f6be3efb0"
+}

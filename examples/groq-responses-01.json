@@ -1,0 +1,28 @@
+{
+  "id": "chatcmpl-737936ce-4113-41bf-93fb-3cfbc86677a9",
+  "object": "chat.completion",
+  "created": 1732006631,
+  "model": "llama3-8b-8192",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Everest, trekking, mountaineering"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "queue_time": 0.010168888000000001,
+    "prompt_tokens": 78,
+    "prompt_time": 0.003341551,
+    "completion_tokens": 10,
+    "completion_time": 0.008333333,
+    "total_tokens": 88,
+    "total_time": 0.011674884
+  },
+  "system_fingerprint": "fp_179b0f92c9",
+  "x_groq": { "id": "req_01jd1t7nvkft4ayvjrxm16wgy3" }
+}
