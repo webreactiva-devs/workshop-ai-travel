@@ -59,12 +59,13 @@ async function handleGroqRequest(text) {
     console.dir(chatCompletion, { depth: null });
 
     const generatedText = chatCompletion.choices[0]?.message?.content;
+    const usage = chatCompletion.usage;
     const tags = generatedText
       .split(",")
       .map((tag) => tag.trim())
       .filter((tag) => tag.length > 0);
 
-    return new Response(JSON.stringify({ tags }), {
+    return new Response(JSON.stringify({ tags, usage }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });

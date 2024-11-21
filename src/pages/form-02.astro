@@ -46,6 +46,10 @@ import Layout from "../layouts/Layout.astro";
           onclick="preventDefault(); alert('Guardado!');">Guardar nota</button
         >
       </div>
+      <div class="mb-4">
+        <p id="token-usage" class="text-sm text-gray-600"></p>
+        <p id="time-usage" class="text-sm text-gray-600"></p>
+      </div>
     </form>
   </main>
 </Layout>
@@ -75,6 +79,13 @@ import Layout from "../layouts/Layout.astro";
 
           const data = await response.json();
           document.getElementById("tags").value = data.tags.join(", ");
+
+          if (data.usage) {
+            document.getElementById("token-usage").textContent =
+              `Tokens: ${data.usage.total_tokens} \n\n - (Coste OpenAPI GPT-4o: ${(data.usage.total_tokens / 1000) * 0.005}) \n\n - Coste Groq: 0`;
+            document.getElementById("time-usage").textContent =
+              `Tiempo: ${data.usage.total_time} segundos`;
+          }
         } catch (error) {
           console.error("Error generating tags:", error);
         } finally {

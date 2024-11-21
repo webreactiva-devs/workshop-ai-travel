@@ -32,10 +32,17 @@ export const POST: APIRoute = async ({ request }) => {
       language: "es",
     });
 
-    return new Response(JSON.stringify({ transcription: transcription.text }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    console.dir(transcription, { depth: null });
+
+    return new Response(
+      JSON.stringify({
+        transcription: transcription.text,
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   } catch (error) {
     console.error("Error in /api/transcribe-audio:", error);
     return new Response(
