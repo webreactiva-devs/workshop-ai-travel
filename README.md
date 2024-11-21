@@ -1,54 +1,32 @@
-# Astro Starter Kit: Basics
+# Taller integración de la IA en proyectos
 
-```sh
-npm create astro@latest -- --template basics
+> Aprendamos a integrar la IA desde el código. Taller en Web Reactiva
+
+## Modo de empleo
+
+1. Installa las dependencias `npm install`
+2. Date de alta en groq.com y crea una cuenta para tener acceso a la API de Groq
+3. Crea el fichero .env con las siguientes variables:
+
+```
+GROQ_API_KEY=tu_api_key
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+4. Si quieres utilizar OpenAI, necesitas una cuenta en OpenAI y una API KEY en .env
+````
+OPENAI_API_KEY=tu_api_key
+`````
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+5. Si quieres utilizar Ollama, necesitas instalar Ollama
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+## Recursos
 
-## 🚀 Project Structure
+- [Groq](https://groq.com/)
+- [Platform OpenAI](https://platform.openai.com/)
+- [Ollama](https://ollama.ai/)
+- [ollamajs](https://www.npmjs.com/package/ollama)
+- [Leaflet](https://leafletjs.com/)
+- [open-meteo](https://open-meteo.com/)
+- [Transformers.js](https://huggingface.co/collections/Xenova/transformersjs-demos-64f9c4f49c099d93dbc611df)
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+> Mucho más sobre IA y desarrollo en [Web Reactiva](https://webreactiva.com/)
