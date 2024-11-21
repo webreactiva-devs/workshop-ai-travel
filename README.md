@@ -2,6 +2,8 @@
 
 > Aprendamos a integrar la IA desde el código. Taller en Web Reactiva
 
+> Utilizaremos la excusa de tener una webpp para apuntar notas de viajes.
+
 ## Modo de empleo
 
 1. Installa las dependencias `npm install`
