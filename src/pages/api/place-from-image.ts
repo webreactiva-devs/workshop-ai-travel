@@ -48,8 +48,6 @@ export const POST: APIRoute = async ({ request }) => {
       response_format: { type: "json_object" },
     });
 
-    console.dir(chatCompletion, { depth: null });
-
     if (!chatCompletion || !chatCompletion.choices) {
       throw new Error(
         "No se pudo obtener una respuesta válida del modelo de IA"

@@ -2,9 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Travel Notes.">
+<Layout title="02. Tags (OpenAI)">
   <main>
-    <h1 class="text-2xl font-bold">Formulario 2 - Tags IA</h1>
     <form
       action="/save-note"
       method="POST"
@@ -47,8 +46,13 @@ import Layout from "../layouts/Layout.astro";
         >
       </div>
       <div class="mb-4">
-        <p id="token-usage" class="text-sm text-gray-600"></p>
-        <p id="time-usage" class="text-sm text-gray-600"></p>
+        <p id="token-usage" class=" text-gray-900"></p>
+        <ul class="text-gray-900">
+          <li>Costo en OpenAI: <span id="price-usage"></span></li>
+          <li>Costo en Groq: 0</li>
+          <li>Costo en Ollama: 0</li>
+        </ul>
+        <p id="time-usage" class=" text-gray-900"></p>
       </div>
     </form>
   </main>
@@ -65,7 +69,7 @@ import Layout from "../layouts/Layout.astro";
 
       if (note.trim() !== "") {
         try {
-          const response = await fetch("/api/generate-tags-groq", {
+          const response = await fetch("/api/tags-openai", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -82,7 +86,9 @@ import Layout from "../layouts/Layout.astro";
 
           if (data.usage) {
             document.getElementById("token-usage").textContent =
-              `Tokens: ${data.usage.total_tokens} \n\n - (Coste OpenAPI GPT-4o: ${(data.usage.total_tokens / 1000) * 0.005}) \n\n - Coste Groq: 0`;
+              `Tokens: ${data.usage.total_tokens}`;
+            document.getElementById("price-usage").textContent =
+              `${(data.usage.total_tokens / 1000) * 0.005}`;
             document.getElementById("time-usage").textContent =
               `Tiempo: ${data.usage.total_time} segundos`;
           }

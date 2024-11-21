@@ -2,9 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Travel Notes.">
+<Layout title="05. Transcribir audio">
   <main>
-    <h1 class="text-2xl font-bold">Formulario 3 - Transcribir IA</h1>
     <form
       action="/save-note"
       method="POST"
@@ -97,7 +96,7 @@ import Layout from "../layouts/Layout.astro";
         formData.append("language", "en");
 
         try {
-          const response = await fetch("/api/generate-transcription-groq", {
+          const response = await fetch("/api/transcription", {
             method: "POST",
             body: formData,
           });

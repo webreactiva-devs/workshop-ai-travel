@@ -1,12 +1,103 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+const items = [
+  {
+    number: "01",
+    text: "Sin nada",
+    path: "/01-form",
+    api: null,
+  },
+  {
+    number: "02",
+    text: "Etiquetas",
+    path: null,
+    children: [
+      {
+        number: "02a",
+        text: "Groq",
+        path: "/02-form",
+        api: "api/tags-groq.ts",
+      },
+      {
+        number: "02b",
+        text: "OpenAI",
+        path: "/02b-form",
+        api: "api/tags-openai.ts",
+      },
+      {
+        number: "02c",
+        text: "Ollama",
+        path: "/02c-form",
+        api: "api/tags-ollama.ts",
+      },
+    ],
+  },
+  {
+    number: "03",
+    text: "Imagen",
+    path: "/03-form",
+    api: "api/note-form-image.ts",
+  },
+  {
+    number: "04",
+    text: "Mapa",
+    path: "/04-form",
+    api: "api/place-from-image.ts",
+  },
+  { number: "05", text: "Voz", path: "/05-form", api: "api/transcription.ts" },
+  {
+    number: "06",
+    text: "Temperatura",
+    path: "/06-form",
+    api: "api/temperature.ts",
+  },
+];
 ---
 
-<Layout title="Travel Notes.">
-  <main>
-    <h1 class="text-2xl font-bold">Travel Notes.</h1>
-    <p class="text-lg">
-      Has conocido mundo y quieres compartir tus notas de viajes.
-    </p>
+<Layout title="Taller en Web Reactiva: Integra tus aplicaciones con la IA">
+  <header class="text-center py-6 bg-indigo-600 text-white">
+    <h1 class="text-4xl font-bold">Integra la IA en tus proyectos</h1>
+  </header>
+  <main class="max-w-4xl mx-auto p-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      {
+        items.map((item) => (
+          <div>
+            {item.children ? (
+              <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                  {item.number} {item.text}
+                </h2>
+                <ul class="space-y-2">
+                  {item.children.map((child) => (
+                    <li class="bg-gray-50 p-4 rounded shadow hover:shadow-md transition">
+                      <a
+                        href={child.path}
+                        class="text-xl font-semibold text-blue-600"
+                      >
+                        {child.number} {child.text}
+                      </a>
+                      <p class="text-sm text-gray-600 mt-2">API: {child.api}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <a
+                href={item.path}
+                class="block bg-white rounded-lg shadow p-6 hover:shadow-md transition"
+              >
+                <h2 class="text-3xl font-bold text-gray-900">{item.number}</h2>
+                <p class="text-lg mt-2">{item.text}</p>
+                {item.api && (
+                  <p class="text-sm text-gray-600 mt-2">API: {item.api}</p>
+                )}
+              </a>
+            )}
+          </div>
+        ))
+      }
+    </div>
   </main>
 </Layout>

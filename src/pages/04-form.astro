@@ -3,9 +3,8 @@ import Layout from "../layouts/Layout.astro";
 import "leaflet/dist/leaflet.css";
 ---
 
-<Layout title="Travel Notes.">
+<Layout title="04. Lugar desde imagen">
   <main>
-    <h1 class="text-2xl font-bold">Formulario 5 - Lugar IA</h1>
     <form
       action="/save-note"
       method="POST"
@@ -100,7 +99,7 @@ import "leaflet/dist/leaflet.css";
 
           try {
             const response = await fetch(
-              "/api/generate-place-from-image-groq",
+              "/api/place-from-image",
               {
                 method: "POST",
                 headers: {

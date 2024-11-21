@@ -2,9 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Travel Notes.">
+<Layout title="03. Nota desde imagen">
   <main>
-    <h1 class="text-2xl font-bold">Formulario 4 - Nota IA</h1>
     <form
       action="/save-note"
       method="POST"
@@ -90,7 +89,7 @@ import Layout from "../layouts/Layout.astro";
           const base64Image = e.target.result.split(",")[1]; // Extract base64 string without metadata
 
           try {
-            const response = await fetch("/api/generate-note-from-image-groq", {
+            const response = await fetch("/api/note-from-image", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

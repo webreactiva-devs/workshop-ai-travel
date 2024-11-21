@@ -2,9 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Travel Notes.">
+<Layout title="06. Temperatura">
   <main>
-    <h1 class="text-2xl font-bold">Formulario 6 - Temperatura IA</h1>
     <form
       action="/save-note"
       method="POST"
@@ -54,7 +53,7 @@ import Layout from "../layouts/Layout.astro";
 
       if (locationInput.trim() !== "") {
         try {
-          const response = await fetch("/api/generate-temperature-groq", {
+          const response = await fetch("/api/temperature", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

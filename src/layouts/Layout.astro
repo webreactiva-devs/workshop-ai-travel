@@ -11,10 +11,33 @@ const { title } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      href="https://webreactiva.com/images/favicon-webreactiva.png"
+      rel="icon"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      href="https://webreactiva.com/images/favicon-webreactiva-negativo.png"
+      rel="icon"
+      media="(prefers-color-scheme: dark)"
+    />
     <title>{title}</title>
   </head>
   <body>
-    <slot />
+    <div class="p-8">
+      <h1 class="text-2xl font-bold text-center border-b-2 border-b-gray-700">
+        {title}
+      </h1>
+      <slot />
+    </div>
+    <footer class="bg-yellow-400 text-center py-2 fixed bottom-0 w-full">
+      <p class="text-black font-bold">
+        Taller de IA con cariño para la <a
+          class="underline"
+          href="https://webreactiva.com"
+          target="_blank">Comunidad Malandriner</a
+        > 🧡
+      </p>
+    </footer>
   </body>
 </html>

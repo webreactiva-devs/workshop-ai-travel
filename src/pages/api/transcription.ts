@@ -20,7 +20,6 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Create a temporary file path
     const tempFilePath = `/tmp/${audioFile.name}`;
     const buffer = Buffer.from(await audioFile.arrayBuffer());
     fs.writeFileSync(tempFilePath, buffer);
@@ -31,8 +30,6 @@ export const POST: APIRoute = async ({ request }) => {
       response_format: "json",
       language: "es",
     });
-
-    console.dir(transcription, { depth: null });
 
     return new Response(
       JSON.stringify({

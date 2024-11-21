@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
-import Groq from "groq-sdk";
+import OpenAI from "openai";
 
-const groq = new Groq({ apiKey: import.meta.env.GROQ_API_KEY });
+const openai = new OpenAI({ apiKey: import.meta.env["OPENAI_API_KEY"] });
 
 export const POST: APIRoute = async ({ request }) => {
   const data = await request.json();
@@ -19,44 +19,31 @@ export const POST: APIRoute = async ({ request }) => {
     );
   }
 
-  return handleGroqRequest(text);
+  return handleOpenAIRequest(text);
 };
 
-async function handleGroqRequest(text) {
-  const completionRequest = {
-    messages: [
-      {
-        role: "system" as const,
-        content: `Eres un asistente especializado en analizar notas de viaje.
+async function handleOpenAIRequest(text) {
+  try {
+    const chatCompletion = await openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: `Eres un asistente especializado en analizar notas de viaje. 
           Tu tarea es extraer tags relevante separados por comas.
           No me des explicaciones. Dame solo los tags separados por comas. Sin introducciones.`,
-      },
-      {
-        role: "user" as const,
-        content: text,
-      },
-    ],
-    model: "llama3-70b-8192",
-    temperature: 1,
-    max_tokens: 1024,
-    top_p: 1,
-    stream: false as const,
-  };
+        },
+        { role: "user", content: text },
+      ],
+      model: "gpt-4o",
+    });
 
-  console.dir(completionRequest, { depth: null });
-
-  try {
-    const chatCompletion = await groq.chat.completions.create(
-      completionRequest
-    );
+    console.dir(chatCompletion, { depth: null });
 
     if (!chatCompletion || !chatCompletion.choices) {
       throw new Error(
         "No se pudo obtener una respuesta válida del modelo de IA"
       );
     }
-
-    console.dir(chatCompletion, { depth: null });
 
     const generatedText = chatCompletion.choices[0]?.message?.content;
     const usage = chatCompletion.usage;
@@ -70,7 +57,7 @@ async function handleGroqRequest(text) {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Error in /api/generate-tags (groq):", error);
+    console.error("Error in /api/generate-tags (openai):", error);
     return new Response(
       JSON.stringify({ error: "Error al generar los tags con IA" }),
       {
