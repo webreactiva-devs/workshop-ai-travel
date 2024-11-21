@@ -1,0 +1,118 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Travel Notes.">
+  <main>
+    <h1 class="text-2xl font-bold">Formulario 3 - Transcribir IA</h1>
+    <form
+      action="/save-note"
+      method="POST"
+      class="max-w-lg mx-auto mt-8 p-4 bg-white rounded-lg shadow-md"
+    >
+      <div class="mb-4">
+        <label for="note" class="block text-sm font-medium text-gray-700 mb-2"
+          >Nota del viaje:</label
+        >
+        <textarea
+          id="note"
+          name="note"
+          rows="6"
+          class="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+          placeholder="Escribe aquí tus experiencias..."></textarea>
+      </div>
+      <div class="mb-4">
+        <button
+          type="button"
+          id="activate-micro"
+          class="mt-2 px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+          >Activar Micro</button
+        >
+        <audio id="audio-preview" controls style="display: none;" class="mt-4"
+        ></audio>
+      </div>
+      <div class="mb-4">
+        <button
+          type="button"
+          id="transcribe-audio"
+          class="mt-2 px-4 py-2 bg-green-500 text-white font-semibold rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75"
+          >Quiero transcribir el audio</button
+        >
+      </div>
+    </form>
+  </main>
+</Layout>
+
+<script>
+  let mediaRecorder;
+  let audioChunks = [];
+
+  document
+    .getElementById("activate-micro")
+    .addEventListener("click", async () => {
+      const activateButton = document.getElementById("activate-micro");
+      const audioPreview = document.getElementById("audio-preview");
+      if (mediaRecorder && mediaRecorder.state === "recording") {
+        mediaRecorder.stop();
+        activateButton.textContent = "Activar Micro";
+      } else {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+          });
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.start();
+          activateButton.textContent = "Detener Grabación";
+
+          mediaRecorder.ondataavailable = (event) => {
+            audioChunks.push(event.data);
+          };
+
+          mediaRecorder.onstop = async () => {
+            const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+            audioChunks = [];
+
+            const audioUrl = URL.createObjectURL(audioBlob);
+            audioPreview.src = audioUrl;
+            audioPreview.style.display = "block";
+          };
+        } catch (error) {
+          console.error("Error accessing microphone:", error);
+        }
+      }
+    });
+
+  document
+    .getElementById("transcribe-audio")
+    .addEventListener("click", async () => {
+      const audioPreview = document.getElementById("audio-preview");
+      if (audioPreview.src) {
+        const audioBlob = await fetch(audioPreview.src).then((res) =>
+          res.blob()
+        );
+        const formData = new FormData();
+        formData.append("file", audioBlob, "recording.webm");
+        formData.append("model", "whisper-large-v3-turbo");
+        formData.append("response_format", "json");
+        formData.append("language", "en");
+
+        try {
+          const response = await fetch("/api/generate-transcription-groq", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!response.ok) {
+            throw new Error("Error en la transcripción del audio");
+          }
+
+          const data = await response.json();
+          document.getElementById("note").value = data.transcription;
+        } catch (error) {
+          console.error("Error transcribing audio:", error);
+        }
+      } else {
+        console.error("No hay audio grabado para transcribir.");
+      }
+    });
+</script>

@@ -3,6 +3,8 @@ import Groq from "groq-sdk";
 
 const groq = new Groq({ apiKey: import.meta.env.GROQ_API_KEY });
 
+const MODEL = "llama-3.2-11b-vision-preview";
+
 export const POST: APIRoute = async ({ request }) => {
   try {
     const { base64Image } = await request.json();
@@ -19,29 +21,27 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
+    const messages: Groq.Chat.Completions.ChatCompletionMessageParam[] = [
+      {
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: "Describe lo que hay en esta imagen y genera una nota de viaje corta. No me des explicaciones.",
+          },
+          {
+            type: "image_url",
+            image_url: {
+              url: `data:image/jpeg;base64,${base64Image}`,
+            },
+          },
+        ],
+      },
+    ];
+
     const chatCompletion = await groq.chat.completions.create({
-      messages: [
-        {
-          role: "user" as const,
-          content: [
-            {
-              type: "text",
-              text: "Describe lo que hay en esta imagen y genera una nota de viaje corta. No me des explicaciones.",
-            },
-            {
-              type: "image_url",
-              image_url: {
-                url: `data:image/jpeg;base64,${base64Image}`,
-              },
-            },
-          ],
-        },
-      ],
-      model: "llama-3.2-11b-vision-preview",
-      temperature: 1,
-      max_tokens: 1024,
-      top_p: 1,
-      stream: false,
+      messages,
+      model: MODEL,
     });
 
     if (!chatCompletion || !chatCompletion.choices) {

@@ -1,0 +1,112 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Travel Notes.">
+  <main>
+    <h1 class="text-2xl font-bold">Formulario 6 - Temperatura IA</h1>
+    <form
+      action="/save-note"
+      method="POST"
+      class="max-w-lg mx-auto mt-8 p-4 bg-white rounded-lg shadow-md"
+    >
+      <div class="mb-4">
+        <label
+          for="location-input"
+          class="block text-sm font-medium text-gray-700 mb-2"
+          >Ingresa el nombre del lugar:</label
+        >
+        <input
+          type="text"
+          id="location-input"
+          name="location-input"
+          class="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+          placeholder="Ejemplo: Central Park, Nueva York"
+        />
+      </div>
+      <div class="mb-4">
+        <button
+          type="button"
+          id="calculate-weather"
+          class="mt-2 px-4 py-2 bg-green-500 text-white font-semibold rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75"
+          >Quiero calcular la temperatura</button
+        >
+      </div>
+      <div class="mb-4">
+        <p id="temperature-result" class="text-lg font-medium text-gray-700">
+        </p>
+        <img id="weather-icon" class="mt-4" style="display: none;" />
+      </div>
+    </form>
+  </main>
+</Layout>
+
+<script>
+  document
+    .getElementById("calculate-weather")
+    .addEventListener("click", async () => {
+      const locationInput = document.getElementById("location-input").value;
+      const calculateButton = document.getElementById("calculate-weather");
+      const temperatureResult = document.getElementById("temperature-result");
+      const weatherIcon = document.getElementById("weather-icon");
+      calculateButton.disabled = true;
+      calculateButton.textContent = "Calculando temperatura...";
+
+      if (locationInput.trim() !== "") {
+        try {
+          const response = await fetch("/api/generate-temperature-groq", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ locationInput }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Error al calcular la temperatura");
+          }
+
+          const data = await response.json();
+          if (data.location && data.location.temperature !== undefined) {
+            temperatureResult.textContent = `La temperatura actual en el lugar identificado es: ${data.location.temperature} °C`;
+
+            // Fetch weather description and icon
+            const weatherCode = data.location.weather_code;
+            const weatherResponse = await fetch(
+              "https://gist.githubusercontent.com/stellasphere/9490c195ed2b53c707087c8c2db4ec0c/raw/76b0cb0ef0bfd8a2ec988aa54e30ecd1b483495d/descriptions.json"
+            );
+            const weatherData = await weatherResponse.json();
+            const weatherInfo = weatherData[weatherCode];
+
+            if (weatherInfo) {
+              const currentTime = new Date().getHours();
+              const dayOrNight =
+                currentTime >= 6 && currentTime < 18 ? "day" : "night";
+              const description = weatherInfo[dayOrNight].description;
+              const imageUrl = weatherInfo[dayOrNight].image;
+
+              temperatureResult.textContent += `, Condición: ${description}`;
+              weatherIcon.src = imageUrl;
+              weatherIcon.style.display = "block";
+            }
+          } else {
+            temperatureResult.textContent =
+              "No se pudo calcular la temperatura.";
+            weatherIcon.style.display = "none";
+          }
+        } catch (error) {
+          console.error("Error calculating temperature:", error);
+          temperatureResult.textContent = "Error al calcular la temperatura.";
+          weatherIcon.style.display = "none";
+        } finally {
+          calculateButton.disabled = false;
+          calculateButton.textContent = "Quiero calcular la temperatura";
+        }
+      } else {
+        calculateButton.disabled = false;
+        calculateButton.textContent = "Quiero calcular la temperatura";
+        temperatureResult.textContent = "Por favor, ingresa un lugar válido.";
+        weatherIcon.style.display = "none";
+      }
+    });
+</script>
